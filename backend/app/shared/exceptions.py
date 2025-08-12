@@ -30,3 +30,9 @@ class UnauthorizedError(DomainException):
 
 class ForbiddenError(DomainException):
     pass
+
+
+class ExternalServiceError(DomainException):
+    def __init__(self, message: str, service: str = "external"):
+        self.service = service
+        super().__init__(f"External service error ({service}): {message}")

@@ -23,12 +23,14 @@ class VideoOutputSchema(BaseModel):
 class TaskBase(BaseModel):
     name: str = Field(..., max_length=255)
     description: Optional[str] = None
-    status: TaskStatus
     customer: str = Field(..., max_length=32)
     log_out_path: str = Field(..., max_length=255)
 
 
 class TaskCreate(TaskBase):
+    # Status with default value
+    status: TaskStatus = TaskStatus.PENDING
+
     # Build configuration
     branch_name: Optional[str] = None
     commit_id: Optional[str] = None
@@ -36,12 +38,12 @@ class TaskCreate(TaskBase):
     build_config_customized: bool = False
     build_config_custom_conf: Dict[str, Any] = {}
     build_config_custom_ini: Dict[str, Any] = {}
-    
+
     # Dataset and output
     dataset_id: Optional[int] = None
     video_out_enabled: bool = False
     video_out_path: str = ""
-    
+
     created_by_id: Optional[int] = None
 
 
@@ -51,7 +53,7 @@ class TaskUpdate(BaseModel):
     status: Optional[TaskStatus] = None
     customer: Optional[str] = Field(None, max_length=32)
     log_out_path: Optional[str] = Field(None, max_length=255)
-    
+
     # Build configuration updates
     branch_name: Optional[str] = None
     commit_id: Optional[str] = None
@@ -59,7 +61,7 @@ class TaskUpdate(BaseModel):
     build_config_customized: Optional[bool] = None
     build_config_custom_conf: Optional[Dict[str, Any]] = None
     build_config_custom_ini: Optional[Dict[str, Any]] = None
-    
+
     # Dataset and output updates
     dataset_id: Optional[int] = None
     video_out_enabled: Optional[bool] = None
@@ -68,16 +70,17 @@ class TaskUpdate(BaseModel):
 
 class TaskResponse(TaskBase):
     id: int
+    status: TaskStatus
     created_at: datetime
     updated_at: Optional[datetime] = None
     created_by_id: Optional[int] = None
-    
+
     # Configuration
     configuration: TaskConfigurationSchema
-    
+
     # Dataset and output
     dataset: Optional[DatasetResponse] = None
     video_output: VideoOutputSchema
-    
+
     class Config:
         from_attributes = True

@@ -201,6 +201,18 @@ class TaskUseCases:
         async with self.uow:
             return await self.uow.tasks.list_all(skip=skip, limit=limit)
     
+    async def update_task_status(self, task_id: int, new_status: TaskStatus) -> Task:
+        """Update task status"""
+        async with self.uow:
+            task = await self.uow.tasks.get_by_id(TaskId(task_id))
+            if not task:
+                raise EntityNotFound("Task", str(task_id))
+            
+            task.update_status(new_status)
+            updated_task = await self.uow.tasks.update(task)
+            await self.uow.commit()
+            return updated_task
+    
     async def list_tasks_by_status(self, status: TaskStatus, skip: int = 0, limit: int = 100) -> List[Task]:
         async with self.uow:
             return await self.uow.tasks.list_by_status(status, skip=skip, limit=limit)

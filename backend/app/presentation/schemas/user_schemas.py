@@ -12,7 +12,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    password: str = Field(..., min_length=8, max_length=128)
 
 
 class UserUpdate(BaseModel):
@@ -25,7 +25,7 @@ class UserUpdate(BaseModel):
 class UserResponse(UserBase):
     id: int
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 

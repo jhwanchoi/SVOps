@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "SVOps"
-    
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
@@ -20,6 +20,7 @@ class Settings(BaseSettings):
             try:
                 # JSON 문자열 파싱 시도
                 import json
+
                 return json.loads(v)
             except json.JSONDecodeError:
                 # JSON이 아니면 쉼표로 구분된 문자열로 처리
@@ -50,11 +51,29 @@ class Settings(BaseSettings):
             port=int(values.get("POSTGRES_PORT", 5432)),
             path=f"{values.get('POSTGRES_DB') or ''}",
         ).unicode_string()
-    
+
     # Security
     SECRET_KEY: str = "change-me-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
-    
+
+    # Airflow
+    AIRFLOW_URL: str = "http://localhost:8080"
+    AIRFLOW_USERNAME: str = "admin"
+    AIRFLOW_PASSWORD: str = "admin"
+
+    # Redis
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    REDIS_PASSWORD: Optional[str] = None
+
+    # WebSocket
+    WEBSOCKET_CHANNEL_PREFIX: str = "svops:ws"
+
+    # Background Tasks
+    CELERY_BROKER_URL: str = "redis://localhost:6379/1"
+    CELERY_RESULT_BACKEND: str = "redis://localhost:6379/1"
+
     model_config = {"env_file": ".env"}
 
 

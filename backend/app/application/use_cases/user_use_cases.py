@@ -12,6 +12,7 @@ class CreateUserCommand:
     username: str
     email: str
     name: str
+    hashed_password: str
     is_active: bool = True
     is_superuser: bool = False
 
@@ -46,6 +47,7 @@ class UserUseCases:
                 username=command.username,
                 email=command.email,
                 name=command.name,
+                hashed_password=command.hashed_password,
                 is_active=command.is_active,
                 is_superuser=command.is_superuser
             )
