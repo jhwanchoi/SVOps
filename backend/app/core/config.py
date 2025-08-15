@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = "password"
     POSTGRES_DB: str = "svops"
     POSTGRES_PORT: str = "5432"
+    POSTGRES_SSLMODE: str = "prefer"
     DATABASE_URL: Optional[PostgresDsn] = None
 
     @field_validator("DATABASE_URL", mode="before")
@@ -73,6 +74,11 @@ class Settings(BaseSettings):
     # Background Tasks
     CELERY_BROKER_URL: str = "redis://localhost:6379/1"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/1"
+
+    # Rate Limiting
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_REQUESTS_PER_MINUTE: int = 100
+    RATE_LIMIT_BURST: int = 10
 
     model_config = {"env_file": ".env"}
 

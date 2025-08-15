@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* DAG Status 신호등 스타일 */
+.dag-status {
+  @apply w-4 h-4 rounded-full inline-block mr-2;
+}
+
+.dag-status.pending {
+  @apply bg-gray-400;
+}
+
+.dag-status.running {
+  @apply bg-yellow-500 animate-pulse;
+}
+
+.dag-status.success {
+  @apply bg-green-500;
+}
+
+.dag-status.failed {
+  @apply bg-red-500;
+}
+
+.dag-status.queued {
+  @apply bg-blue-400;
+}

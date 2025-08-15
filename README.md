@@ -89,15 +89,73 @@ git clone <repository-url>
 cd SVOps
 ```
 
-2. **Start all services**
+2. **Initialize the project** (first time only)
 ```bash
-docker-compose up -d
+./init.sh
 ```
 
-3. **Access the services**
-- FastAPI Backend: http://localhost:8000
-- Airflow Web UI: http://localhost:8080 (admin/admin)
+3. **Start local development environment**
+```bash
+./deploy-local.sh
+```
+
+4. **Access the services**
 - Frontend: http://localhost:3000
+- FastAPI Backend: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+- Airflow Web UI: http://localhost:8080
+
+5. **Default credentials**
+- Username: admin
+- Password: admin123
+
+## 🛠️ Management Scripts
+
+### `init.sh` - Project Initialization
+First-time setup script that:
+- Builds Docker containers
+- Starts database and Redis
+- Creates database tables
+- Creates default admin user
+
+```bash
+./init.sh
+```
+
+### `deploy-local.sh` - Local Development
+Starts all services for local development:
+- Performs health checks
+- Shows service status
+- Provides access URLs
+
+```bash
+./deploy-local.sh
+```
+
+### `deploy.sh` - Production Deployment
+Production deployment with environment configuration:
+```bash
+./deploy.sh production  # Use .env.production
+./deploy.sh staging     # Use .env.staging
+```
+
+Features:
+- Environment-specific configuration
+- Database migration checks
+- Health monitoring
+- Backup creation
+
+### `logs.sh` - Log Management
+Comprehensive log viewing tool:
+```bash
+./logs.sh                    # All services
+./logs.sh backend            # Backend only
+./logs.sh backend true       # Follow backend logs
+./logs.sh backend true 100   # Last 100 lines, follow
+./logs.sh status             # Service status
+```
+
+Available services: backend, frontend, postgres, redis, airflow-webserver, airflow-scheduler
 
 ### Service URLs
 

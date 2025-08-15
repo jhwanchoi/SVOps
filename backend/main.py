@@ -6,6 +6,7 @@ from app.core.config import settings
 from app.core.database import engine
 from app.core.redis import redis_client
 from app.core.error_handlers import setup_exception_handlers
+from app.core.rate_limit import setup_rate_limiting
 from app.presentation.api.api import api_router
 
 
@@ -48,6 +49,9 @@ app.add_middleware(
 
 # Set up exception handlers
 setup_exception_handlers(app)
+
+# Set up rate limiting
+setup_rate_limiting(app)
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

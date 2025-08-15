@@ -149,7 +149,7 @@ check_environment_task = BashOperator(
     echo "📅 Date: $(date)"
     echo "💻 Hostname: $(hostname)"
     echo "👤 User: $(whoami)"
-    echo "📂 Working Directory: $(pwd)"
+    echo " Working Directory: $(pwd)"
     echo "🐍 Python Version: $(python3 --version)"
     echo "✅ Environment check completed"
     """,

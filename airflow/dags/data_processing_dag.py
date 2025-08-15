@@ -207,7 +207,7 @@ setup_task = BashOperator(
     task_id='setup_environment',
     bash_command="""
     echo "🔧 Setting up processing environment..."
-    echo "📂 Creating temporary directories..."
+    echo " Creating temporary directories..."
     mkdir -p /tmp/svops_pipeline_{{ ds }}
     echo "🔍 Checking disk space..."
     df -h

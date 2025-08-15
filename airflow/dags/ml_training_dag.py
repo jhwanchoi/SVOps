@@ -255,7 +255,7 @@ setup_ml_env_task = BashOperator(
     echo "📦 Checking GPU availability..."
     echo "💾 Checking available memory..."
     free -h
-    echo "📂 Creating model output directory..."
+    echo " Creating model output directory..."
     mkdir -p /tmp/ml_models_{{ ds }}
     echo "✅ ML environment setup completed"
     """,

@@ -1,11 +1,12 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel, EmailStr, Field
 
 from app.core.database import get_db
 from app.core.dependencies import get_current_user, get_current_active_user
+from app.core.rate_limit import auth_rate_limit, api_rate_limit
 from app.application.services.auth_service import AuthService, Token, get_auth_service
 from app.application.use_cases.user_use_cases import UserUseCases, CreateUserCommand
 from app.infrastructure.repositories.unit_of_work import SQLAlchemyUnitOfWork
@@ -58,7 +59,9 @@ def _user_to_response(user: User) -> UserResponse:
 
 
 @router.post("/login", response_model=TokenResponse)
+@auth_rate_limit()
 async def login(
+    request: Request,
     login_data: LoginRequest,
     auth_service: AuthService = Depends(get_auth_service),
     use_cases: UserUseCases = Depends(get_user_use_cases),
@@ -114,7 +117,9 @@ async def login(
 
 
 @router.post("/login/oauth2", response_model=Token)
+@auth_rate_limit()
 async def login_oauth2(
+    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     auth_service: AuthService = Depends(get_auth_service),
     use_cases: UserUseCases = Depends(get_user_use_cases),
@@ -181,7 +186,9 @@ async def login_oauth2(
 @router.post(
     "/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED
 )
+@auth_rate_limit()
 async def register(
+    request: Request,
     register_data: RegisterRequest,
     auth_service: AuthService = Depends(get_auth_service),
     use_cases: UserUseCases = Depends(get_user_use_cases),

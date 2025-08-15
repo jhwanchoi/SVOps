@@ -10,6 +10,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: svops
       POSTGRES_MULTIPLE_DATABASES: airflow
+      POSTGRES_INITDB_ARGS: "--auth-host=trust --auth-local=trust"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
       - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
@@ -46,6 +47,8 @@ services:
       - AIRFLOW__WEBSERVER__SECRET_KEY=airflow_secret_key
       - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=true
       - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+      - AIRFLOW__WEBSERVER__AUTHENTICATE=true
+      - AIRFLOW__WEBSERVER__RBAC=true
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -60,8 +63,8 @@ services:
         condition: service_healthy
     command: >
       bash -c "
-      airflow db init &&
-      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@svops.com --password admin &&
+      sleep 10 &&
+      airflow db check-migrations &&
       airflow webserver
       "
     healthcheck:
@@ -69,6 +72,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    restart: unless-stopped
 
   # Airflow Scheduler
   airflow-scheduler:

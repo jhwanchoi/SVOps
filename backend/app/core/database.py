@@ -10,6 +10,11 @@ engine = create_async_engine(
     pool_size=10,
     max_overflow=20,
     echo=False,
+    connect_args={
+        "server_settings": {
+            "application_name": "svops_backend",
+        }
+    }
 )
 
 AsyncSessionLocal = async_sessionmaker(
